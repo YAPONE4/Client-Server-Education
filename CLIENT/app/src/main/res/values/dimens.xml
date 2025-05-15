@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="button_width">97dp</dimen>
+    <dimen name="button_height">40dp</dimen>
+    <dimen name="editText_height">56dp</dimen>
+    <dimen name="editText_width">263dp</dimen>
+    <dimen name="editText_size">16sp</dimen>
+    <dimen name="editText_padding">20dp</dimen>
+    <dimen name="bottomNav_width">352dp</dimen>
+    <dimen name="bottomNav_height">80dp</dimen>
+</resources>
