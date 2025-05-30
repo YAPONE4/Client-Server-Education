@@ -1,4 +1,4 @@
-package routing
+/*package routing
 
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -11,4 +11,4 @@ fun Route.TestRoute() {
 }
 
 @Serializable
-data class TestResponse(val text: String)
+data class TestResponse(val text: String)*/

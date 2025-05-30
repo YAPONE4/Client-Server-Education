@@ -1,4 +1,4 @@
-package routing
+/*package routing
 
 import cache.InMemoryCache
 import cache.RegisterInfo
@@ -35,4 +35,4 @@ fun Route.RegisterRouting() {
 
         call.respond(TokenResponseRemote(token))
     }
-}
+}*/

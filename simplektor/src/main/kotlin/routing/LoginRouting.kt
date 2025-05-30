@@ -1,4 +1,4 @@
-package routing
+/*ackage routing
 
 import cache.InMemoryCache
 import io.ktor.server.request.*
@@ -24,4 +24,4 @@ fun Route.LoginRouting() {
 
         call.respond(TokenResponseRemote(user.token))
     }
-}
+}*/

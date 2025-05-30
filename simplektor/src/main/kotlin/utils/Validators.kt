@@ -1,9 +1,6 @@
-package utils
+package com.example.utils
 
-object Validators {
-    val EMAIL_REGEX = Regex("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}\$")
+private val emailRegex =
+    "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
 
-    fun isValidEmail(email: String): Boolean {
-        return EMAIL_REGEX.matches(email)
-    }
-}
+fun isEmailValid(email: String) = emailRegex.matches(email)
