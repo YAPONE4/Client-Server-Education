@@ -12,8 +12,8 @@ class CourseAdapter(
     private val onItemClick: (Course) -> Unit
 ) : RecyclerView.Adapter<CourseAdapter.CourseViewHolder>() {
 
-    private var fullCourseList: List<Course> = courseList // Сохраняем оригинальный список
-    private var filteredCourses: List<Course> = fullCourseList // Список с фильтром
+    private var fullCourseList: List<Course> = courseList
+    private var filteredCourses: List<Course> = fullCourseList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_course, parent, false)
@@ -21,9 +21,9 @@ class CourseAdapter(
     }
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
-        val course = filteredCourses[position] // Используем filteredCourses для отображения
+        val course = filteredCourses[position]
         holder.textViewCourseName.text = course.title
-        holder.textViewCourseDescription.text = course.body
+        holder.textViewCourseDescription.text = course.description
 
         holder.itemView.setOnClickListener {
             onItemClick(course)
@@ -31,27 +31,27 @@ class CourseAdapter(
     }
 
     override fun getItemCount(): Int {
-        return filteredCourses.size // Возвращаем размер фильтрованного списка
+        return filteredCourses.size
     }
 
     fun updateData(newCourseList: List<Course>) {
-        fullCourseList = newCourseList // Обновляем оригинальный список
-        filteredCourses = newCourseList // Обновляем фильтрованный список
-        courseList = newCourseList // Обновляем текущий список
+        fullCourseList = newCourseList
+        filteredCourses = newCourseList
+        courseList = newCourseList
         notifyDataSetChanged()
     }
 
     fun filter(query: String?) {
         filteredCourses = if (query.isNullOrEmpty()) {
-            fullCourseList // Если нет запроса, показываем все
+            fullCourseList
         } else {
-            fullCourseList.filter { it.title.contains(query, ignoreCase = true) } // Фильтруем по заголовку
+            fullCourseList.filter { it.title.contains(query, ignoreCase = true) }
         }
         notifyDataSetChanged()
     }
 
     fun clearFilter() {
-        filteredCourses = fullCourseList // Сбрасываем фильтр
+        filteredCourses = fullCourseList
         notifyDataSetChanged()
     }
 

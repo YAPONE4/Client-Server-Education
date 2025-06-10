@@ -1,7 +1,10 @@
 package com.example
 
+
+import com.example.models.Courses
 import com.example.models.Users
 import com.example.models.Tokens
+import com.example.models.UserCourses
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -18,7 +21,7 @@ object DatabaseFactory {
             password = "postgres"
         )
         transaction {
-            SchemaUtils.create(Users, Tokens)
+            SchemaUtils.createMissingTablesAndColumns(Users, Tokens, Courses, UserCourses)
         }
     }
 

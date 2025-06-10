@@ -31,7 +31,7 @@
     <EditText
         android:id="@+id/editTextPassword"
         style="@style/EditTextStyle"
-        android:hint="Password"
+        android:hint="Пароль"
         android:inputType="textPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -42,7 +42,7 @@
     <EditText
         android:id="@+id/editTextRepeatPassword"
         style="@style/EditTextStyle"
-        android:hint="Repeat password"
+        android:hint="Повторите пароль"
         android:inputType="textPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -53,7 +53,7 @@
     <Button
         android:id="@+id/buttonSignUp"
         style="@style/ButtonStyle"
-        android:text="Sign Up"
+        android:text="Регистр."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"

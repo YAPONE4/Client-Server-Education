@@ -12,13 +12,12 @@ class LoginController {
             val user = Users.fetchUser(receive.email)
                 ?: return@dbQuery Result.failure(IllegalArgumentException("User not found"))
 
-            if (user.passwordHash != receive.password) {
+            return@dbQuery if (user.passwordHash != receive.password) {
                 Result.failure(IllegalArgumentException("Invalid password"))
             } else {
-                // генерим новый токен каждый раз
                 val token = UUID.randomUUID().toString()
                 Tokens.insertToken(receive.email, token)
-                Result.success(TokenResponseRemote(token))
+                Result.success(TokenResponseRemote(token = token, userId = user.id))
             }
         }
 }

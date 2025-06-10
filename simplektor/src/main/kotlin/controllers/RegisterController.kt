@@ -4,6 +4,7 @@ import com.example.DatabaseFactory.dbQuery
 import com.example.models.*
 import com.example.utils.isEmailValid
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.insertAndGetId
 import java.util.*
 
 class RegisterController {
@@ -20,14 +21,14 @@ class RegisterController {
                 else -> {
                     val token = UUID.randomUUID().toString()
 
-                    Users.insert {
-                        it[email]     = receive.email
+                    val userId = Users.insertAndGetId {
+                        it[email] = receive.email
                         it[passwordHash] = receive.password // TODO: hash
-                    }
+                    }.value
 
                     Tokens.insertToken(receive.email, token)
 
-                    Result.success(TokenResponseRemote(token))
+                    Result.success(TokenResponseRemote(token, userId))
                 }
             }
         }

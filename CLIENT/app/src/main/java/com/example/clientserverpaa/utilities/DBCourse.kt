@@ -1,7 +1,8 @@
 package com.example.clientserverpaa.utilities
 
-data class Course(
+data class DBCourse(
     val id: Int,
     val title: String,
-    val description: String
+    val description: String,
+    val date: String
 )

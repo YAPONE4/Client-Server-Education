@@ -13,9 +13,10 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.clientserverpaa.net.AuthApiClient
-import com.example.clientserverpaa.net.AuthApiService
 import com.example.clientserverpaa.utilities.LoginRequest
+import com.example.clientserverpaa.utilities.LoginResponse
 import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -61,12 +62,16 @@ class MainActivity : AppCompatActivity() {
                 try {
                     val response = AuthApiClient.api.login(LoginRequest(email, password))
                     if (response.isSuccessful) {
-                        Toast.makeText(this@MainActivity, "Успешный вход", Toast.LENGTH_SHORT).show()
-                        val token = response.body()?.token
-                        if (token != null) {
+                        val loginResponse = response.body()
+                        if (loginResponse != null) {
+                            val token = loginResponse.token
+                            val userId = loginResponse.userId
                             prefs.edit {
                                 putString("auth_token", token)
+                                putInt("userId", userId) // сохраняем userId
                             }
+
+                            Toast.makeText(this@MainActivity, "Успешный вход", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this@MainActivity, MyCoursesActivity::class.java))
                         }
                     } else {

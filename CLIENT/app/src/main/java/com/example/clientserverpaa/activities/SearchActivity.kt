@@ -18,7 +18,9 @@ import com.example.clientserverpaa.utilities.CourseAdapter
 import com.example.clientserverpaa.utilities.HistoryAdapter
 import com.example.clientserverpaa.utilities.HistoryItem
 import com.example.clientserverpaa.R
+import com.example.clientserverpaa.net.AuthApiClient
 import com.example.clientserverpaa.net.RetrofitClient
+import com.example.clientserverpaa.utilities.CourseListResponse
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
@@ -98,7 +100,12 @@ class SearchActivity : AppCompatActivity() {
 
         recyclerViewCourses.layoutManager = LinearLayoutManager(this)
         recyclerViewCourses.adapter = CourseAdapter(listOf()) { course ->
-            Toast.makeText(this@SearchActivity, "Clicked: ${course.title}", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this@SearchActivity, CourseActivity::class.java).apply {
+                putExtra("courseId", course.id)
+                putExtra("courseName", course.title)
+                putExtra("courseDescription", course.description)
+            }
+            startActivity(intent)
         }
 
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -156,21 +163,39 @@ class SearchActivity : AppCompatActivity() {
 
     private fun searchCourses(query: String?) {
         showLoading()
+
         searchHandler.postDelayed({
-            val api = RetrofitClient.api
-            api.getCourses().enqueue(object : Callback<List<Course>> {
-                override fun onResponse(call: Call<List<Course>>, response: Response<List<Course>>) {
-                    if (response.isSuccessful && !response.body().isNullOrEmpty()) {
-                        allCourses = response.body()!!
-                        filterCourses(query)
+            val api = AuthApiClient.api
+
+            api.getCourses().enqueue(object : Callback<CourseListResponse> {
+                override fun onResponse(call: Call<CourseListResponse>, response: Response<CourseListResponse>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val courses = response.body()!!.courses
+
+                        if (courses.isNotEmpty()) {
+                            allCourses = courses
+                            filterCourses(query)
+                        } else {
+                            showNoResultsPlaceholder()
+                        }
+
                     } else {
-                        showNoResultsPlaceholder()
+                        showErrorPlaceholder()
+                        Toast.makeText(
+                            this@SearchActivity,
+                            "Ошибка загрузки курсов: пустой ответ",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
-                override fun onFailure(call: Call<List<Course>>, t: Throwable) {
+                override fun onFailure(call: Call<CourseListResponse>, t: Throwable) {
                     showErrorPlaceholder()
-                    Toast.makeText(this@SearchActivity, "Ошибка подключения: ${t.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@SearchActivity,
+                        "Ошибка подключения: ${t.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
         }, 500)
@@ -218,11 +243,14 @@ class SearchActivity : AppCompatActivity() {
         history.remove(query)
         history.add(0, query)
         if (history.size > 10) history.removeAt(history.lastIndex)
-        sharedPrefs.edit().putStringSet("search_history", history.toSet()).apply()
+        val historyString = history.joinToString(separator = "|")
+        sharedPrefs.edit().putString("search_history", historyString).apply()
     }
 
     private fun getSearchHistory(): List<String> {
-        return sharedPrefs.getStringSet("search_history", emptySet())?.toList()?.sortedByDescending { it } ?: emptyList()
+        val historyString = sharedPrefs.getString("search_history", "") ?: ""
+        if (historyString.isBlank()) return emptyList()
+        return historyString.split("|").filter { it.isNotBlank() }
     }
 
     private fun showSearchHistory() {

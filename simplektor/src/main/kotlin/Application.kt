@@ -11,11 +11,10 @@ import org.slf4j.event.Level
 import kotlinx.serialization.json.Json
 
 fun main() {
-    // запускаем БД + плагины, а потом сам сервер
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
-        DatabaseFactory.init()          // <-- подключаемся к PostgreSQL
-        configureContentNegotiation()   // json()
-        configureRouting()              // /register, /login, /test
+        DatabaseFactory.init()
+        configureContentNegotiation()
+        configureRouting()
     }.start(wait = true)
 }
 

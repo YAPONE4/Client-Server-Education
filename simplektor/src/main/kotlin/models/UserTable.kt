@@ -9,5 +9,5 @@ object Users : IntIdTable() {
 
     fun fetchUser(mail: String) = select { email eq mail }
         .singleOrNull()
-        ?.let { UserDTO(it[email], it[passwordHash]) }
+        ?.let { UserDTO(it[id].value,it[email], it[passwordHash]) }
 }
